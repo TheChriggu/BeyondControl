@@ -19,6 +19,8 @@ public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public Robot robot;
 
+    public bool singlePlayer = true;
+
     private void OnLevelWasLoaded()
     {
         //Instantiate the robot from prefab in resources folder over the network to ensure proper positioning on both screens
@@ -35,8 +37,6 @@ public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("MasterOrdersCount: " + masterOrders.Count);
-        Debug.Log("ClientOrdersCount: " + clientOrdersUnsorted.Count);
         if(masterOrders.Count > 0 && masterOrders.Count == clientOrdersUnsorted.Count)
         {
             CombineOrderListsAndSendToRobot();
@@ -45,16 +45,17 @@ public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public void HandleOrders(List<Order> orders)
     {
-        Debug.Log("Handling orders");
-        if (PhotonNetwork.IsMasterClient)
+        if(singlePlayer)
         {
-            Debug.Log("Setting master orders");
+            robot.addNewList(orders);
+        }
+        else if (PhotonNetwork.IsMasterClient)
+        {
             masterOrders = orders;
         }
 
         else
         {
-            Debug.Log("Sending Orders to master");
             for (int i = 0; i < orders.Count; i++)
             {
                 Vector3 contentData = new Vector3(i, (int)orders[i].type, orders[i].value);
@@ -81,7 +82,6 @@ public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
             allOrders.Add(clientOrders[i]);
         }
 
-        Debug.Log("Passing orders to robot.");
         robot.addNewList(allOrders);
 
         masterOrders = new List<Order>();
@@ -90,13 +90,11 @@ public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public void OnEvent(EventData photonEvent)
     {
-        Debug.Log("Receiving Photon Event");
         EventCodes code = (EventCodes)photonEvent.Code;
 
         switch (code)
         {
             case EventCodes.Order:
-                Debug.Log("Event is a new order");
                 Vector3 contentData = (Vector3)photonEvent.CustomData;
                 var order = new Order((Order.Type)contentData.y, contentData.z);
                 clientOrdersUnsorted.Add((int)contentData.x, order);
