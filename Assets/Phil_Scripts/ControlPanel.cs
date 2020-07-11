@@ -4,8 +4,9 @@ using UnityEngine.UI;
 
 public class ControlPanel : MonoBehaviour
 {
-    //public Robot robot;
+    public Robot robot;
     public NetworkComponent networkComponent;
+    int numOfOrdersRequired = 5;
 
     public GameObject ListOfOrdersVisuals;
     [SerializeField]
@@ -13,6 +14,11 @@ public class ControlPanel : MonoBehaviour
 
     public Button SpeedButton;
     public Button RotateButton;
+
+    public Button RepeatButton;
+    public Button PassButton;
+
+    public Button StartButton;
 
     public Slider SpeedSlider;
     public Slider RotateSlider;
@@ -22,6 +28,11 @@ public class ControlPanel : MonoBehaviour
 
     public Text SpeedNumber;
     public Text RotateNumber;
+
+    private void Update()
+    {
+        SetButtonInteractibility();
+    }
 
     #region sliders
     public void setSpeedNumber(float value)
@@ -61,7 +72,6 @@ public class ControlPanel : MonoBehaviour
     }
     public void giveListToRobot()
     {
-        //robot.addNewList(MyOrders);
         networkComponent.HandleOrders(MyOrders);
         clearList();
     }
@@ -69,6 +79,7 @@ public class ControlPanel : MonoBehaviour
 
     void clearList()
     {
+        
         MyOrders = new List<Order>();
         foreach (Transform child in ListOfOrdersVisuals.transform)
         {
@@ -93,6 +104,62 @@ public class ControlPanel : MonoBehaviour
         if (o.value != 0) textOrder.text = "Type: " + o.type.ToString() + " , " + o.value;
         else textOrder.text = "Type: " + o.type.ToString();
     }
+
+
+    #region button interactibility
+    void SetButtonInteractibility()
+    {
+        if (robot.IsExecutingOrders())
+        {
+            DisableNewOrderSubmission();
+            DisableOrderListSubmission();
+        }
+        else if (MyOrders.Count < numOfOrdersRequired)
+        {
+            EnableNewOrderSubmission();
+            DisableOrderListSubmission();
+        }
+        else
+        {
+            DisableNewOrderSubmission();
+            EnableOrderListSubmission();
+        }
+    }
+
+    void EnableOrderListSubmission()
+    {
+        StartButton.interactable = true;
+    }
+
+    void DisableOrderListSubmission()
+    {
+        StartButton.interactable = false;
+    }
+
+    void EnableNewOrderSubmission()
+    {
+        SpeedButton.interactable = true;
+        RotateButton.interactable = true;
+
+        SpeedSlider.interactable = true;
+        RotateSlider.interactable = true;
+
+        RepeatButton.interactable = true;
+        PassButton.interactable = true;
+    }
+
+    void DisableNewOrderSubmission()
+    {
+        SpeedButton.interactable = false;
+        RotateButton.interactable = false;
+
+        SpeedSlider.interactable = false;
+        RotateSlider.interactable = false;
+
+        RepeatButton.interactable = false;
+        PassButton.interactable = false;
+    }
+    #endregion
 }
 
 public class Order
