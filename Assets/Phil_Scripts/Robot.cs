@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class Robot : MonoBehaviour
+public class Robot : MonoBehaviourPunCallbacks
 {
     public float timeBetweenOrders = 2;
     //public float moveSpeed = 5;
@@ -220,8 +221,11 @@ public class Robot : MonoBehaviour
         //Removing Order from list
         listOfOrders.RemoveAt(0);
 
-        //Executing Order
-        executeOrder(nextOrder);
+        if(PhotonNetwork.IsMasterClient)
+        {
+            //Executing Order only on master client
+            executeOrder(nextOrder);
+        }
 
         //adding past List it to Memory
         listOfOrdersPast.Add(nextOrder);
@@ -271,5 +275,10 @@ public class Robot : MonoBehaviour
     public bool IsExecutingOrders()
     {
         return listOfOrders.Count > 0;
+    }
+
+    public List<Order> GetListOfOrders()
+    {
+        return listOfOrders;
     }
 }

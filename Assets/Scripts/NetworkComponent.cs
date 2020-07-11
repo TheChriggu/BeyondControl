@@ -14,8 +14,8 @@ public enum EventCodes
 
 public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
 {
-    private List<Order> masterOrders;
-    private Dictionary<int, Order> clientOrdersUnsorted = new Dictionary<int, Order>();
+    private List<Order> ownOrders;
+    private Dictionary<int, Order> otherOrdersUnsorted = new Dictionary<int, Order>();
 
     public Robot robot;
     public GameObject playerDisconnectedPanel;
@@ -25,14 +25,14 @@ public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
     // Start is called before the first frame update
     void Start()
     {
-        masterOrders = new List<Order>();
-        clientOrdersUnsorted = new Dictionary<int, Order>();
+        ownOrders = new List<Order>();
+        otherOrdersUnsorted = new Dictionary<int, Order>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(masterOrders.Count > 0 && masterOrders.Count == clientOrdersUnsorted.Count)
+        if(ownOrders.Count > 0 && ownOrders.Count == otherOrdersUnsorted.Count)
         {
             CombineOrderListsAndSendToRobot();
         }
@@ -46,7 +46,7 @@ public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
         }
         else if (PhotonNetwork.IsMasterClient)
         {
-            masterOrders = orders;
+            ownOrders = orders;
         }
 
         else
@@ -64,23 +64,32 @@ public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
     private void CombineOrderListsAndSendToRobot()
     {
         var clientOrders = new List<Order>();
-        for (int i = 0; i < clientOrdersUnsorted.Count; i++)
+        for (int i = 0; i < otherOrdersUnsorted.Count; i++)
         {
-            clientOrders.Add(clientOrdersUnsorted[i]);
+            clientOrders.Add(otherOrdersUnsorted[i]);
         }
 
         var allOrders = new List<Order>();
 
         for(int i = 0; i < clientOrders.Count; i++)
         {
-            allOrders.Add(masterOrders[i]);
-            allOrders.Add(clientOrders[i]);
+            if(PhotonNetwork.IsMasterClient)
+            {
+                allOrders.Add(ownOrders[i]);
+                allOrders.Add(clientOrders[i]);
+            }
+            else
+            {
+                allOrders.Add(clientOrders[i]);
+                allOrders.Add(ownOrders[i]);
+            }
+
         }
 
         robot.addNewList(allOrders);
 
-        masterOrders = new List<Order>();
-        clientOrdersUnsorted = new Dictionary<int, Order>();
+        ownOrders = new List<Order>();
+        otherOrdersUnsorted = new Dictionary<int, Order>();
     }
 
     public void OnEvent(EventData photonEvent)
@@ -92,7 +101,7 @@ public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
             case EventCodes.Order:
                 Vector3 contentData = (Vector3)photonEvent.CustomData;
                 var order = new Order((Order.Type)contentData.y, contentData.z);
-                clientOrdersUnsorted.Add((int)contentData.x, order);
+                otherOrdersUnsorted.Add((int)contentData.x, order);
                 break;
         }
     }
