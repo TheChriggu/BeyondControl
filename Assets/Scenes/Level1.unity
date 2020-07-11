@@ -3252,10 +3252,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b38f4a723fbded74b943c62681cadd8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  robot: {fileID: 161110774}
   networkComponent: {fileID: 2012601402}
   ListOfOrdersVisuals: {fileID: 245600558}
   SpeedButton: {fileID: 42677211}
   RotateButton: {fileID: 1228679240}
+  RepeatButton: {fileID: 0}
+  PassButton: {fileID: 0}
+  StartButton: {fileID: 0}
   SpeedSlider: {fileID: 17056350}
   RotateSlider: {fileID: 1911011290}
   SpeedNumber: {fileID: 654237628}
@@ -5433,7 +5437,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   robot: {fileID: 161110774}
   playerDisconnectedPanel: {fileID: 1000463090}
-  singlePlayer: 0
+  singlePlayer: 1
 --- !u!4 &2012601403
 Transform:
   m_ObjectHideFlags: 0

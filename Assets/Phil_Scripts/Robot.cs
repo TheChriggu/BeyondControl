@@ -212,6 +212,7 @@ public class Robot : MonoBehaviour
         if (listOfOrders.Count < 1)
         {
             Debug.LogWarning("No more Orders");
+            targetVelocity = 0;
             return;
         }
 
@@ -266,4 +267,9 @@ public class Robot : MonoBehaviour
         //debugging.transform.position = transform.position + direction;
     }
     #endregion
+
+    public bool IsExecutingOrders()
+    {
+        return listOfOrders.Count > 0;
+    }
 }
