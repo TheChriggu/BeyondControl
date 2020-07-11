@@ -12,9 +12,6 @@ EditorBuildSettings:
     path: Assets/Scenes/LoginScreen.unity
     guid: 41ad783f1f2a9a74e8df91fd6f074491
   - enabled: 1
-    path: Assets/Scenes/Lobby.unity
-    guid: 095b380c183a93544924593e9508b7db
-  - enabled: 1
     path: Assets/Scenes/WaitingRoom.unity
     guid: 57f95b111d4fd9643942417ac25339c2
   - enabled: 1
