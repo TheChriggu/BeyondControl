@@ -6,10 +6,12 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.SceneManagement;
 
-public class WaitingRoom : MonoBehaviour
+public class WaitingRoom : MonoBehaviourPunCallbacks
 {
     public Text operationMessage;
     public Text playerMessage;
+
+    string otherPlayerName;
 
     float timeToStart = 50;
 
@@ -18,7 +20,7 @@ public class WaitingRoom : MonoBehaviour
     {
         if (PhotonNetwork.PlayerListOthers.Length > 0)
         {
-            playerMessage.text = "You are playing with " + PhotonNetwork.PlayerListOthers[0].NickName + ".";
+            playerMessage.text = "You are playing with " + otherPlayerName + ".";
 
             operationMessage.gameObject.SetActive(true);
 
@@ -39,7 +41,10 @@ public class WaitingRoom : MonoBehaviour
             playerMessage.text = "Waiting for other Player.";
             operationMessage.gameObject.SetActive(false);
         }
+    }
 
-
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        otherPlayerName = PhotonNetwork.PlayerListOthers[0].NickName;
     }
 }
