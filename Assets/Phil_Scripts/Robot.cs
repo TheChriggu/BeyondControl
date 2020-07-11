@@ -97,6 +97,11 @@ public class Robot : MonoBehaviour
         {
             enterGrass();
         }
+        else if (collision.gameObject.tag == "ExpensiveStuff")
+        {
+            ExpensiveStuff stuff = collision.gameObject.GetComponent<ExpensiveStuff>();
+            DamageCounter.instance.AddPropertyDamage(stuff.monetaryValue, transform.position);
+        }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -127,6 +132,7 @@ public class Robot : MonoBehaviour
         //Debug.Log("Entered Grass");
         onGrass = true;
         setModifier();
+        DamageCounter.instance.AddPropertyDamage(50, transform.position);
     }  
     void exitStreet()
     {
