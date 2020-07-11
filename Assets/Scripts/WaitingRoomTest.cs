@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class WaitingRoomTest : MonoBehaviour
+public class WaitingRoomTest : MonoBehaviourPunCallbacks
 {
     public Text masterName;
     public Text clientName;
@@ -31,4 +31,6 @@ public class WaitingRoomTest : MonoBehaviour
             }
         }
     }
+
+
 }

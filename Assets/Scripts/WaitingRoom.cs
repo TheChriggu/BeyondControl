@@ -11,7 +11,7 @@ public class WaitingRoom : MonoBehaviour
     public Text operationMessage;
     public Text playerMessage;
 
-    float timeToStart = 5;
+    float timeToStart = 50;
 
     // Update is called once per frame
     void Update()
@@ -19,6 +19,8 @@ public class WaitingRoom : MonoBehaviour
         if (PhotonNetwork.PlayerListOthers.Length > 0)
         {
             playerMessage.text = "You are playing with " + PhotonNetwork.PlayerListOthers[0].NickName + ".";
+
+            operationMessage.gameObject.SetActive(true);
 
             operationMessage.text = "Starting in " + Mathf.CeilToInt(timeToStart).ToString();
 
