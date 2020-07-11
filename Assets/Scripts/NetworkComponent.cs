@@ -12,7 +12,7 @@ public enum EventCodes
     Order
 }
 
-public class NetworkComponent : MonoBehaviourPunCallbacks//, IOnEventCallback
+public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
 {
     private List<Order> masterOrders;
     private Dictionary<int, Order> clientOrdersUnsorted = new Dictionary<int, Order>();
@@ -35,6 +35,8 @@ public class NetworkComponent : MonoBehaviourPunCallbacks//, IOnEventCallback
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("MasterOrdersCount: " + masterOrders.Count);
+        Debug.Log("ClientOrdersCount: " + clientOrdersUnsorted.Count);
         if(masterOrders.Count > 0 && masterOrders.Count == clientOrdersUnsorted.Count)
         {
             CombineOrderListsAndSendToRobot();
@@ -43,13 +45,16 @@ public class NetworkComponent : MonoBehaviourPunCallbacks//, IOnEventCallback
 
     public void HandleOrders(List<Order> orders)
     {
+        Debug.Log("Handling orders");
         if (PhotonNetwork.IsMasterClient)
         {
+            Debug.Log("Setting master orders");
             masterOrders = orders;
         }
 
         else
         {
+            Debug.Log("Sending Orders to master");
             for (int i = 0; i < orders.Count; i++)
             {
                 Vector3 contentData = new Vector3(i, (int)orders[i].type, orders[i].value);
@@ -76,6 +81,7 @@ public class NetworkComponent : MonoBehaviourPunCallbacks//, IOnEventCallback
             allOrders.Add(clientOrders[i]);
         }
 
+        Debug.Log("Passing orders to robot.");
         robot.addNewList(allOrders);
 
         masterOrders = new List<Order>();
@@ -84,11 +90,13 @@ public class NetworkComponent : MonoBehaviourPunCallbacks//, IOnEventCallback
 
     public void OnEvent(EventData photonEvent)
     {
+        Debug.Log("Receiving Photon Event");
         EventCodes code = (EventCodes)photonEvent.Code;
 
         switch (code)
         {
             case EventCodes.Order:
+                Debug.Log("Event is a new order");
                 Vector3 contentData = (Vector3)photonEvent.CustomData;
                 var order = new Order((Order.Type)contentData.y, contentData.z);
                 clientOrdersUnsorted.Add((int)contentData.x, order);

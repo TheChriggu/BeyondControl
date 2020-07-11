@@ -4,7 +4,9 @@ using UnityEngine.UI;
 
 public class ControlPanel : MonoBehaviour
 {
-    public Robot robot;
+    //public Robot robot;
+    public NetworkComponent networkComponent;
+
     public GameObject ListOfOrdersVisuals;
     [SerializeField]
     List<Order> MyOrders = new List<Order>();
@@ -59,14 +61,15 @@ public class ControlPanel : MonoBehaviour
     }
     public void giveListToRobot()
     {
-        robot.addNewList(MyOrders);
+        //robot.addNewList(MyOrders);
+        networkComponent.HandleOrders(MyOrders);
         clearList();
     }
     #endregion
 
     void clearList()
     {
-        MyOrders.Clear();
+        MyOrders = new List<Order>();
         foreach (Transform child in ListOfOrdersVisuals.transform)
         {
             Destroy(child.gameObject);

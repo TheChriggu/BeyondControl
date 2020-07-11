@@ -2448,7 +2448,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b38f4a723fbded74b943c62681cadd8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  robot: {fileID: 161110774}
+  networkComponent: {fileID: 2012601402}
   ListOfOrdersVisuals: {fileID: 245600558}
   SpeedButton: {fileID: 42677211}
   RotateButton: {fileID: 1228679240}
@@ -3755,6 +3755,50 @@ MonoBehaviour:
   player: {fileID: 161110772}
   smoothSpeed: 0.2
   offset: {x: 0, y: 0, z: -20}
+--- !u!1 &2012601401
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2012601403}
+  - component: {fileID: 2012601402}
+  m_Layer: 0
+  m_Name: NetworkComponent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2012601402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012601401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27cc2fa4a22d76f4193cea396575a16c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  robot: {fileID: 161110774}
+--- !u!4 &2012601403
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012601401}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.063159, y: -4.2607546, z: -185.50758}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2048095478
 GameObject:
   m_ObjectHideFlags: 0
