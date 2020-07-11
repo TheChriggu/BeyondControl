@@ -18,14 +18,9 @@ public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
     private Dictionary<int, Order> clientOrdersUnsorted = new Dictionary<int, Order>();
 
     public Robot robot;
+    public GameObject playerDisconnectedPanel;
 
     public bool singlePlayer = true;
-
-    private void OnLevelWasLoaded()
-    {
-        //Instantiate the robot from prefab in resources folder over the network to ensure proper positioning on both screens
-        //PhotonNetwork.Instantiate(Prefabname, position, rotation);
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -100,5 +95,10 @@ public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
                 clientOrdersUnsorted.Add((int)contentData.x, order);
                 break;
         }
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        playerDisconnectedPanel.SetActive(true);
     }
 }
