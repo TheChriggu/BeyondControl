@@ -11,13 +11,19 @@ public class WaitingRoom : MonoBehaviourPunCallbacks
     public Text operationMessage;
     public Text playerMessage;
 
-    string otherPlayerName;
+    string otherPlayerName = "";
 
-    float timeToStart = 50;
+    float timeToStart = 5;
 
     // Update is called once per frame
     void Update()
     {
+
+        if (otherPlayerName == "" && !PhotonNetwork.IsMasterClient)
+        {
+            otherPlayerName = PhotonNetwork.MasterClient.NickName;
+        }
+
         if (PhotonNetwork.PlayerListOthers.Length > 0)
         {
             playerMessage.text = "You are playing with " + otherPlayerName + ".";
@@ -45,6 +51,9 @@ public class WaitingRoom : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        otherPlayerName = PhotonNetwork.PlayerListOthers[0].NickName;
+        if (PhotonNetwork.IsMasterClient)
+        {
+            otherPlayerName = PhotonNetwork.PlayerListOthers[0].NickName;
+        }
     }
 }
