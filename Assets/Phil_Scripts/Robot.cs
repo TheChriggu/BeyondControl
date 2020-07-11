@@ -8,6 +8,14 @@ public class Robot : MonoBehaviour
     //public float moveSpeed = 5;
     public float acceleration = 10;
     public float rotationSpeed = 10;
+    [SerializeField]
+    float floorModifier = 1;
+    [Tooltip("How much slower the Player moves on Grass: -0.3 = 30% slower")]
+    public float grassmodifier = -0.3f;
+    [Tooltip("How much faster the Player moves on Streets: 0.5 = 50% faster")]
+    public float streetmodifier = 0.5f;
+    bool onStreet = false;
+    bool onGrass = false;
 
     float currentVelocity = 0;
     float targetVelocity;
@@ -27,7 +35,6 @@ public class Robot : MonoBehaviour
     private void Start()
     {
         rigidbody = GetComponent<Rigidbody2D>();
-        InvokeRepeating("onTick", 0, timeBetweenOrders);
     }
     #region movement
     void Update()
@@ -35,11 +42,12 @@ public class Robot : MonoBehaviour
         //Debugging Controlls
         #region Speed
         setSpeed();
-        rigidbody.AddForce(transform.up * currentVelocity);
+        rigidbody.AddForce(transform.up * currentVelocity * floorModifier);
         #endregion
 
         #region rotation
         if (setRotation()) rigidbody.AddTorque(-rotateAmount * rotationSpeed);
+        if (countdownActive && countdownEnd < Time.time) OnCountDownEnd();
         #endregion
     }
 
@@ -61,17 +69,106 @@ public class Robot : MonoBehaviour
         rotateAmount = Vector3.Cross(direction, transform.up).z;
 
         if (Mathf.Abs(rotateAmount) > 0.01) return true;
+        else startCountdown(timeBetweenOrders);
+
         return false;
+    }
+
+    void getBoosted(Vector3 dir, Vector3 from, float force, bool spinning)
+    {
+        if(spinning)rigidbody.AddForceAtPosition(dir * force, from, ForceMode2D.Impulse);
+        else rigidbody.AddForce(dir * force, ForceMode2D.Impulse);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("Entered Trigger");
+
+        if (collision.gameObject.tag == "Booster")
+        {
+            Booster booster = collision.GetComponent<Booster>();
+            getBoosted(collision.transform.up, collision.transform.position, booster.boostingPower, booster.playerStartsSpinning);
+        }
+        else if (collision.gameObject.tag == "Street")
+        {
+            enterStreet();
+        }
+        else if (collision.gameObject.tag == "Grass")
+        {
+            enterGrass();
+        }
+        else if (collision.gameObject.tag == "ExpensiveStuff")
+        {
+            ExpensiveStuff stuff = collision.gameObject.GetComponent<ExpensiveStuff>();
+            DamageCounter.instance.AddPropertyDamage(stuff.monetaryValue, transform.position);
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        Debug.Log("Exited Trigger");
+        if (collision.gameObject.tag == "Street")
+        {
+            exitStreet();
+        }
+        if (collision.gameObject.tag == "Grass")
+        {
+            exitGrass();
+        }
+    }
+
+
+    #endregion
+
+    #region floorModifiers
+    void enterStreet()
+    {
+        //Debug.Log("Entered Street");
+        onStreet = true;
+        setModifier();
+    }
+
+    void enterGrass()
+    {
+        //Debug.Log("Entered Grass");
+        onGrass = true;
+        setModifier();
+        DamageCounter.instance.AddPropertyDamage(50, transform.position);
+    }  
+    void exitStreet()
+    {
+        //Debug.Log("Exited Street");
+        onStreet = false;
+        setModifier();
+    }
+
+    void exitGrass()
+    {
+        //Debug.Log("Exited Grass");
+        onGrass = false;
+        setModifier();
+    }
+
+    void setModifier()
+    {
+        floorModifier = 1;
+        if (onGrass) floorModifier += grassmodifier;
+        if (onStreet) floorModifier += streetmodifier;
     }
     #endregion
 
     #region Ticks
-    //void startCountdown(float t)
-    //{
-    //    //if (countdownEnd > Time.time) return;
-    //    countdownActive = true;
-    //    countdownEnd = Time.time + t;
-    //}
+    void startCountdown(float t)
+    {
+        //if (countdownEnd > Time.time) return;
+        countdownActive = true;
+        countdownEnd = Time.time + t;
+    }
+
+    void OnCountDownEnd()
+    {
+        countdownActive = false;
+        lockRotation = true;
+    }
 
     void onTick()
     {
@@ -102,6 +199,9 @@ public class Robot : MonoBehaviour
     #region execute Orders
     public void addNewList(List<Order> newOrders)
     {
+        //Starts the regular Ticks
+        InvokeRepeating("onTick", 0, timeBetweenOrders);
+
         foreach (var order in newOrders)
         {
             listOfOrders.Add(order);
