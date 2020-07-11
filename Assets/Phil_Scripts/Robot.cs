@@ -98,20 +98,19 @@ public class Robot : MonoBehaviour
             enterGrass();
         }
     }
-
-
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExit2D(Collider2D collision)
     {
         Debug.Log("Exited Trigger");
-        if (other.gameObject.tag == "Street")
+        if (collision.gameObject.tag == "Street")
         {
             exitStreet();
-        }     
-        if (other.gameObject.tag == "Grass")
+        }
+        if (collision.gameObject.tag == "Grass")
         {
             exitGrass();
         }
     }
+
 
     #endregion
 
