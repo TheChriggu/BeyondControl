@@ -26,6 +26,8 @@ public class WaitingRoom : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.PlayerListOthers.Length > 0)
         {
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+
             playerMessage.text = "You are playing with " + otherPlayerName + ".";
 
             operationMessage.gameObject.SetActive(true);
@@ -46,6 +48,8 @@ public class WaitingRoom : MonoBehaviourPunCallbacks
         {
             playerMessage.text = "Waiting for other Player.";
             operationMessage.gameObject.SetActive(false);
+            timeToStart = 5;
+            PhotonNetwork.CurrentRoom.IsOpen = true;
         }
     }
 
