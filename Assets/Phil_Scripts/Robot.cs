@@ -30,6 +30,9 @@ public class Robot : MonoBehaviourPunCallbacks
     float countdownEnd;
     bool lockRotation = false;
 
+    Animator animator;
+    public GameObject robotSprite;
+
     List<Order> listOfOrders = new List<Order>();
     List<Order> listOfOrdersPast = new List<Order>();
 
@@ -37,6 +40,9 @@ public class Robot : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        animator = GetComponent<Animator>();
+        animator.SetInteger("Direction", 1);
+
         body = GetComponent<Rigidbody2D>();
     }
     #region movement
@@ -46,12 +52,19 @@ public class Robot : MonoBehaviourPunCallbacks
         #region Speed
         setSpeed();
         body.AddForce(transform.up * currentVelocity * floorModifier);
+
+        animator.SetFloat("Speed", currentVelocity);
         #endregion
 
         #region rotation
-        if (setRotation()) body.AddTorque(-rotateAmount * rotationSpeed);
+        if (setRotation())
+        {
+            body.AddTorque(-rotateAmount * rotationSpeed);
+        }
         //if (countdownActive) Debug.Log("Coundown: " + (countdownEnd - Time.time));
         if (countdownActive && countdownEnd < Time.time) OnCountDownEnd();
+
+        robotSprite.transform.localRotation = Quaternion.Euler(-transform.eulerAngles);
         #endregion
     }
 
@@ -271,6 +284,24 @@ public class Robot : MonoBehaviourPunCallbacks
     {
         lockRotation = false;
         direction = Quaternion.AngleAxis(-rotation, Vector3.forward) * transform.up;
+
+            var myDirection = direction;
+        if (Mathf.Abs(direction.y) > Mathf.Abs(direction.x) && direction.y > 0)
+        {
+            animator.SetInteger("Direction", 1);
+        }
+        else if (Mathf.Abs(direction.y) < Mathf.Abs(direction.x) && direction.x < 0)
+        {
+            animator.SetInteger("Direction", 2);
+        }
+        else if (Mathf.Abs(direction.y) > Mathf.Abs(direction.x) && direction.y < 0)
+        {
+            animator.SetInteger("Direction", 3);
+        }
+        else if (Mathf.Abs(direction.y) < Mathf.Abs(direction.x) && direction.x > 0)
+        {
+            animator.SetInteger("Direction", 0);
+        }
         //debugging.transform.position = transform.position + direction;
     }
     #endregion

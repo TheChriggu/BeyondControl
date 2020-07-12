@@ -33,7 +33,7 @@ public class Cam : MonoBehaviour
         if (followPlayer)
         {
             Debug.Log("Cam lerps");
-            currentPosition = Vector3.Lerp(transform.position, finalPosition, smoothSpeed);
+            currentPosition = Vector3.Lerp(transform.position, finalPosition, smoothSpeed * Time.deltaTime);
         }
         else if(allowCameraMovement)
         {
@@ -41,7 +41,7 @@ public class Cam : MonoBehaviour
             var direction = finalPosition - transform.position;
             direction = direction.normalized;
 
-            currentPosition = transform.position + direction * levelStartViewSpeed;
+            currentPosition = transform.position + direction * levelStartViewSpeed * Time.deltaTime;
 
             if((currentPosition - finalPosition).sqrMagnitude < 0.01f)
             {
