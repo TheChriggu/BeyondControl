@@ -50,7 +50,7 @@ public class Robot : MonoBehaviourPunCallbacks
 
         #region rotation
         if (setRotation()) body.AddTorque(-rotateAmount * rotationSpeed);
-        if (countdownActive) Debug.Log("Coundown: " + (countdownEnd - Time.time));
+        //if (countdownActive) Debug.Log("Coundown: " + (countdownEnd - Time.time));
         if (countdownActive && countdownEnd < Time.time) OnCountDownEnd();
         #endregion
     }
