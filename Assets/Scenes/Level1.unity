@@ -1128,7 +1128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   robot: {fileID: 1801321619}
   playerDisconnectedPanel: {fileID: 1983216168}
-  singlePlayer: 1
+  singlePlayer: 0
   visuals: {fileID: 2034882302}
 --- !u!4 &1584490040
 Transform:
