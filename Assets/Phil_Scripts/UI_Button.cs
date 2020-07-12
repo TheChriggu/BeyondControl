@@ -48,6 +48,13 @@ public class UI_Button : MonoBehaviour
         currentValue = float.Parse(value);
 
         //restricts possible values
+        checkValue();
+
+        inputField.SetTextWithoutNotify(currentValue.ToString());
+    }
+
+    void checkValue()
+    {
         if (type == Order.Type.Speed)
         {
             if (currentValue < -maxSpeed) currentValue = -maxSpeed;
@@ -58,7 +65,6 @@ public class UI_Button : MonoBehaviour
             if (currentValue < -179) currentValue = -179;
             if (currentValue > 179) currentValue = 179;
         }
-        inputField.SetTextWithoutNotify(currentValue.ToString());
     }
 
     public Order returnOrder()
@@ -72,6 +78,7 @@ public class UI_Button : MonoBehaviour
         //Debug.Log("increasing Value");
         if ((int)type > 1) return;
         currentValue += i;
+        checkValue();
         inputField.SetTextWithoutNotify(currentValue.ToString());
     }
 }

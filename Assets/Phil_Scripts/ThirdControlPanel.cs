@@ -5,6 +5,7 @@ using UnityEngine;
 public class ThirdControlPanel : MonoBehaviour
 {
     public GameObject[] Orders;
+    public GameObject[] Visuals;
     int currentOrder = 0;
 
     private void Start()
@@ -16,8 +17,18 @@ public class ThirdControlPanel : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.D)) nextOrder();
         if (Input.GetKeyDown(KeyCode.A)) prevOrder();
-        if (Input.GetKeyDown(KeyCode.W)) increaseValue(1);
-        if (Input.GetKeyDown(KeyCode.S)) increaseValue(-1);
+        //quickly increases value
+        if (Orders[currentOrder].GetComponent<UI_Button>().returnOrder().type == Order.Type.Rotation)
+        {
+            if (Input.GetKey(KeyCode.W)) increaseValue(1);
+            if (Input.GetKey(KeyCode.S)) increaseValue(-1);
+        }
+        //slowly increases value
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.W)) increaseValue(1);
+            if (Input.GetKeyDown(KeyCode.S)) increaseValue(-1);
+        }
     }
 
     public void showOrder(int i)
