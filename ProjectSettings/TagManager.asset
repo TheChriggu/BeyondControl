@@ -10,6 +10,7 @@ TagManager:
   - ExpensiveStuff
   - Flower
   - DeathZone
+  - Music
   layers:
   - Default
   - TransparentFX
