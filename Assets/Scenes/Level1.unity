@@ -1211,6 +1211,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6331982145793701010, guid: 09b42ccfe4eee884895f1ffca9ce3d16,
+        type: 3}
+      propertyPath: networkComponent
+      value: 
+      objectReference: {fileID: 1584490039}
     - target: {fileID: 6331982145793701022, guid: 09b42ccfe4eee884895f1ffca9ce3d16,
         type: 3}
       propertyPath: viewIdField
