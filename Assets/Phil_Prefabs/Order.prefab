@@ -76,7 +76,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 042130e8c97144b4f8b6a5238953166d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputField: {fileID: 3451272663193975005}
+  inputField: {fileID: 3451272663193975007}
   dropdown: {fileID: 3451272663071433488}
 --- !u!1 &3451272663071433494
 GameObject:
@@ -416,13 +416,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3451272663193975006}
   m_TextComponent: {fileID: 3451272664593846208}
   m_Placeholder: {fileID: 3451272663653903189}
-  m_ContentType: 2
+  m_ContentType: 3
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 4
+  m_KeyboardType: 2
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 1
+  m_CharacterValidation: 2
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:

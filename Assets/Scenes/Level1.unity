@@ -3998,8 +3998,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f6611f308343e449ac04ab8f29ab910, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  robot: {fileID: 0}
-  networkComponent: {fileID: 0}
+  networkComponent: {fileID: 1584490039}
   UIElements: []
 --- !u!1001 &953630950
 PrefabInstance:
@@ -6119,11 +6118,11 @@ RectTransform:
   m_Father: {fileID: 1965219677}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -475.7, y: -70.2}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 18.299988, y: -70.2}
   m_SizeDelta: {x: 160, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1672365502
 MonoBehaviour:
   m_ObjectHideFlags: 0

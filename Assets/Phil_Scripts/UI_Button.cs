@@ -5,10 +5,11 @@ using UnityEngine.UI;
 
 public class UI_Button : MonoBehaviour
 {
-    public GameObject inputField;
+    public InputField inputField;
     public Dropdown dropdown;
     List<String> availableOrders = new List<string>();
     float currentValue = 0;
+    float maxSpeed = 20;
     Order.Type type = Order.Type.Pass;
 
     private void Start()
@@ -32,19 +33,32 @@ public class UI_Button : MonoBehaviour
         {
             //showing the input field
             dropdown.GetComponent<RectTransform>().sizeDelta = new Vector2(width/2, 30);
-            inputField.SetActive(true);
+            inputField.gameObject.SetActive(true);
         }
         else
         {
             //hiding the input field
             dropdown.GetComponent<RectTransform>().sizeDelta = new Vector2(width, 30);
-            inputField.SetActive(false);
+            inputField.gameObject.SetActive(false);
         }
     }
 
     public void onInputValueChanged(string value)
     {
         currentValue = float.Parse(value);
+
+        //restricts possible values
+        if (type == Order.Type.Speed)
+        {
+            if (currentValue < -maxSpeed) currentValue = -maxSpeed;
+            if (currentValue > maxSpeed) currentValue = maxSpeed;
+        }
+        if (type == Order.Type.Rotation)
+        {
+            if (currentValue < -179) currentValue = -179;
+            if (currentValue > 179) currentValue = 179;
+        }
+        inputField.SetTextWithoutNotify(currentValue.ToString());
     }
 
     public Order returnOrder()
