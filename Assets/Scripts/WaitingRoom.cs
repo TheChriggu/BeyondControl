@@ -18,14 +18,26 @@ public class WaitingRoom : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
+        var players = PhotonNetwork.PlayerList;
 
-        if (otherPlayerName == "" && !PhotonNetwork.IsMasterClient)
+
+
+        /*if (otherPlayerName == "" && !PhotonNetwork.IsMasterClient)
         {
             otherPlayerName = PhotonNetwork.MasterClient.NickName;
-        }
+        }*/
 
         if (PhotonNetwork.PlayerListOthers.Length > 0)
         {
+            if (PhotonNetwork.IsMasterClient && otherPlayerName == "")
+            {
+                otherPlayerName = players[1].NickName;
+            }
+            else if(otherPlayerName == "")
+            {
+                otherPlayerName = players[0].NickName;
+            }
+
             PhotonNetwork.CurrentRoom.IsOpen = false;
 
             playerMessage.text = "You are playing with " + otherPlayerName + ".";
@@ -53,11 +65,11 @@ public class WaitingRoom : MonoBehaviourPunCallbacks
         }
     }
 
-    public override void OnPlayerEnteredRoom(Player newPlayer)
+    /*public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         if (PhotonNetwork.IsMasterClient)
         {
             otherPlayerName = PhotonNetwork.PlayerListOthers[0].NickName;
         }
-    }
+    }*/
 }
