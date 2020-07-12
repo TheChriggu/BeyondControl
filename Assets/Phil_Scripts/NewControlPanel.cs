@@ -4,18 +4,41 @@ using UnityEngine;
 
 public class NewControlPanel : MonoBehaviour
 {
-    public Robot robot;
+    //public Robot robot;
     public NetworkComponent networkComponent;
     List<Order> MyOrders = new List<Order>();
-    int numOfOrdersRequired = 5;
+    public UI_Button[] UIElements;
+
+    private void Start()
+    {
+        UIElements = new UI_Button[transform.childCount];
+        int n = 0;
+        foreach (Transform child in transform)
+        {
+            UI_Button b = child.GetComponent<UI_Button>();
+            UIElements[n] = b;
+            n++;
+        }
+    }
 
     void clearList()
     {
+        MyOrders = new List<Order>();
+    }
 
-        //MyOrders = new List<Order>();
-        //foreach (Transform child in ListOfOrdersVisuals.transform)
-        //{
-        //    Destroy(child.gameObject);
-        //}
+    public void giveListToRobot()
+    {
+        collectOrders();
+
+        networkComponent.HandleOrders(MyOrders);
+        clearList();
+    }
+
+    void collectOrders()
+    {
+        foreach (var element in UIElements)
+        {
+            MyOrders.Add(element.returnOrder());
+        }
     }
 }
