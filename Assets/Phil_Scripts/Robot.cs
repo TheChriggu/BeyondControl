@@ -34,6 +34,7 @@ public class Robot : MonoBehaviourPunCallbacks
     List<Order> listOfOrdersPast = new List<Order>();
 
     public NetworkComponent networkComponent;
+    public ListOfOrdersVisuals ListOfOrdersVisuals;
 
     private void Start()
     {
@@ -178,6 +179,7 @@ public class Robot : MonoBehaviourPunCallbacks
     {
         Debug.Log("TICK!");
         executeNextOrder();
+        ListOfOrdersVisuals.removeLatestOrder();
     }
     #endregion
     //void DebugControlls()
