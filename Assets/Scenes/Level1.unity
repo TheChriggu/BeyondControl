@@ -1764,6 +1764,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8162795435108630201, guid: 64d8670836b964c498c6eae9d1139e09,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8162795435108630202, guid: 64d8670836b964c498c6eae9d1139e09,
         type: 3}
       propertyPath: networkComponent
@@ -1777,6 +1782,11 @@ PrefabInstance:
     - target: {fileID: 8162795435385583517, guid: 64d8670836b964c498c6eae9d1139e09,
         type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8162795435385583517, guid: 64d8670836b964c498c6eae9d1139e09,
+        type: 3}
+      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8162795436263099413, guid: 64d8670836b964c498c6eae9d1139e09,
