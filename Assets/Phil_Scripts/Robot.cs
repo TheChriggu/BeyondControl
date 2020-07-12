@@ -230,6 +230,8 @@ public class Robot : MonoBehaviourPunCallbacks
         {
             Debug.LogWarning("No more Orders");
             targetVelocity = 0;
+            body.velocity = Vector3.zero;
+            body.angularVelocity = 0;
             return;
         }
 

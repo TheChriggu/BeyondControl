@@ -62,10 +62,13 @@ public class LevelGoal : MonoBehaviourPunCallbacks, IOnEventCallback
 
         yield return new WaitForSeconds(5);
 
-        if (PhotonNetwork.IsMasterClient)
+        SceneManager.LoadScene(nextSceneName, LoadSceneMode.Single);
+
+        /*if(PhotonNetwork.IsMasterClient)
         {
-            SceneManager.LoadScene(nextSceneName);
-        }
+            SceneManager.LoadScene(nextSceneName, LoadSceneMode.Single);
+            PhotonNetwork.LoadLevel(nextSceneName);
+        }*/
 
 
     }

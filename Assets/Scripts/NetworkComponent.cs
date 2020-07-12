@@ -124,6 +124,7 @@ public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
+        Debug.Log("Other player has left the room");
         playerDisconnectedPanel.SetActive(true);
     }
 

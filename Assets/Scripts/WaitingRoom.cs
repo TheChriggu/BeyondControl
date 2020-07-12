@@ -51,8 +51,9 @@ public class WaitingRoom : MonoBehaviourPunCallbacks
                 timeToStart -= Time.deltaTime;
             }
 
-            if (PhotonNetwork.IsMasterClient && timeToStart <= 0)
+            if (timeToStart <= 0)
             {
+                //PhotonNetwork.LoadLevel("Level1");
                 SceneManager.LoadScene("Level1");
             }
         }

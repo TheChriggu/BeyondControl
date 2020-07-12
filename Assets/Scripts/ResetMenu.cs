@@ -35,10 +35,14 @@ public class ResetMenu : MonoBehaviourPunCallbacks, IOnEventCallback
                 OnResetDenied();
                 break;
             case EventCodes.ConfirmReset:
-                if (PhotonNetwork.IsMasterClient)
+                //PhotonNetwork.AutomaticallySyncScene = true;
+                //SceneManager.LoadScene((SceneManager.GetActiveScene().buildIndex));
+                SceneManager.LoadScene((SceneManager.GetActiveScene().buildIndex));
+                /*if (PhotonNetwork.IsMasterClient)
                 {
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
-                }
+                    SceneManager.LoadScene((SceneManager.GetActiveScene().buildIndex));
+                    //PhotonNetwork.LoadLevel(SceneManager.GetActiveScene().buildIndex);
+                }*/
                 break;
         }
     }
@@ -52,7 +56,7 @@ public class ResetMenu : MonoBehaviourPunCallbacks, IOnEventCallback
     public void OnConfirmResetButton()
     {
         resetMenu.SetActive(false);
-        RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
+        RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.All };
         PhotonNetwork.RaiseEvent((byte)EventCodes.ConfirmReset, null, options, SendOptions.SendReliable);
     }
 

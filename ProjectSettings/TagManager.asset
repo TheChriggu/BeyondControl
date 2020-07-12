@@ -9,6 +9,7 @@ TagManager:
   - Street
   - ExpensiveStuff
   - Flower
+  - DeathZone
   layers:
   - Default
   - TransparentFX
