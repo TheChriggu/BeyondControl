@@ -5,7 +5,28 @@ using UnityEngine.UI;
 public class ListOfOrdersVisuals : MonoBehaviour
 {
     bool firstOrder = true; //first order doesn't get deleted instantly
+
+    public Robot robot;
     //public GameObject ListOfOrders; simply using the object holding this script now
+
+    private void Update()
+    {
+        if(robot.IsExecutingOrders())
+        {
+            foreach (Transform child in transform)
+            {
+                child.gameObject.SetActive(true);
+            }
+        }
+        else
+        {
+            foreach (Transform child in transform)
+            {
+                child.gameObject.SetActive(false);
+            }
+        }
+    }
+
     public void AddOrders(List<Order> orderList)
     {
         //Debug.Log("Showing List of size: " + orderList.Count);

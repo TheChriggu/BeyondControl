@@ -25,6 +25,8 @@ public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public bool singlePlayer = true;
 
+    public ListOfOrdersVisuals visuals;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -91,6 +93,9 @@ public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
         }
 
         robot.addNewList(allOrders);
+
+        //Debugging
+        visuals.AddOrders(allOrders);
 
         ownOrders = new List<Order>();
         otherOrdersUnsorted = new Dictionary<int, Order>();

@@ -8,7 +8,6 @@ public class NewControlPanel : MonoBehaviour
     public NetworkComponent networkComponent;
     List<Order> MyOrders = new List<Order>();
     public UI_Button[] UIElements;
-    public ListOfOrdersVisuals visuals;
 
     private void Start()
     {
@@ -32,9 +31,6 @@ public class NewControlPanel : MonoBehaviour
         collectOrders();
 
         networkComponent.HandleOrders(MyOrders);
-
-        //Debugging
-        visuals.AddOrders(MyOrders);
 
         clearList();
     }
