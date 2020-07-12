@@ -9,30 +9,36 @@ using ExitGames.Client.Photon;
 public enum EventCodes
 {
     None = 0,
-    Order
+    Order,
+    RequestReset,
+    ConfirmReset,
+    DenyReset,
+    LevelCompleted
 }
 
 public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
 {
-    private List<Order> masterOrders;
-    private Dictionary<int, Order> clientOrdersUnsorted = new Dictionary<int, Order>();
+    private List<Order> ownOrders;
+    private Dictionary<int, Order> otherOrdersUnsorted = new Dictionary<int, Order>();
 
     public Robot robot;
     public GameObject playerDisconnectedPanel;
 
     public bool singlePlayer = true;
 
+    public ListOfOrdersVisuals visuals;
+
     // Start is called before the first frame update
     void Start()
     {
-        masterOrders = new List<Order>();
-        clientOrdersUnsorted = new Dictionary<int, Order>();
+        ownOrders = new List<Order>();
+        otherOrdersUnsorted = new Dictionary<int, Order>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(masterOrders.Count > 0 && masterOrders.Count == clientOrdersUnsorted.Count)
+        if(ownOrders.Count > 0 && ownOrders.Count == otherOrdersUnsorted.Count)
         {
             CombineOrderListsAndSendToRobot();
         }
@@ -44,18 +50,19 @@ public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             robot.addNewList(orders);
         }
-        else if (PhotonNetwork.IsMasterClient)
+        /*else if (PhotonNetwork.IsMasterClient)
         {
-            masterOrders = orders;
-        }
-
+            ownOrders = orders;
+        }*/
         else
         {
+            ownOrders = orders;
+
             for (int i = 0; i < orders.Count; i++)
             {
                 Vector3 contentData = new Vector3(i, (int)orders[i].type, orders[i].value);
                 object content = (object)contentData;
-                RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
+                RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.Others};
                 PhotonNetwork.RaiseEvent((byte)EventCodes.Order, content, options, SendOptions.SendReliable);
             }
         }
@@ -64,27 +71,40 @@ public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
     private void CombineOrderListsAndSendToRobot()
     {
         var clientOrders = new List<Order>();
-        for (int i = 0; i < clientOrdersUnsorted.Count; i++)
+        for (int i = 0; i < otherOrdersUnsorted.Count; i++)
         {
-            clientOrders.Add(clientOrdersUnsorted[i]);
+            clientOrders.Add(otherOrdersUnsorted[i]);
         }
 
         var allOrders = new List<Order>();
 
         for(int i = 0; i < clientOrders.Count; i++)
         {
-            allOrders.Add(masterOrders[i]);
-            allOrders.Add(clientOrders[i]);
+            if(PhotonNetwork.IsMasterClient)
+            {
+                allOrders.Add(ownOrders[i]);
+                allOrders.Add(clientOrders[i]);
+            }
+            else
+            {
+                allOrders.Add(clientOrders[i]);
+                allOrders.Add(ownOrders[i]);
+            }
+
         }
 
         robot.addNewList(allOrders);
 
-        masterOrders = new List<Order>();
-        clientOrdersUnsorted = new Dictionary<int, Order>();
+        //Debugging
+        visuals.AddOrders(allOrders);
+
+        ownOrders = new List<Order>();
+        otherOrdersUnsorted = new Dictionary<int, Order>();
     }
 
     public void OnEvent(EventData photonEvent)
     {
+
         EventCodes code = (EventCodes)photonEvent.Code;
 
         switch (code)
@@ -92,13 +112,24 @@ public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
             case EventCodes.Order:
                 Vector3 contentData = (Vector3)photonEvent.CustomData;
                 var order = new Order((Order.Type)contentData.y, contentData.z);
-                clientOrdersUnsorted.Add((int)contentData.x, order);
+
+                if(!otherOrdersUnsorted.ContainsKey((int)contentData.x))
+                {
+                    otherOrdersUnsorted.Add((int)contentData.x, order);
+                }
                 break;
+
         }
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
+        Debug.Log("Other player has left the room");
         playerDisconnectedPanel.SetActive(true);
+    }
+
+    public bool IsSingleplayer()
+    {
+        return singlePlayer;
     }
 }

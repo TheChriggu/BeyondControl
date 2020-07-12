@@ -8,6 +8,8 @@ TagManager:
   - Grass
   - Street
   - ExpensiveStuff
+  - Flower
+  - DeathZone
   - Music
   layers:
   - Default

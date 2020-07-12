@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
+using Photon.Realtime;
+using ExitGames.Client.Photon;
 
-public class PauseMenus : MonoBehaviour
+public class PauseMenus : MonoBehaviourPunCallbacks
 {
     public GameObject playerDisconnectedMenu;
     public GameObject pauseMenu;
@@ -20,6 +22,10 @@ public class PauseMenus : MonoBehaviour
     public void OnBackToMainMenu()
     {
         PhotonNetwork.Disconnect();
+    }
+
+    public override void OnDisconnected(DisconnectCause cause)
+    {
         SceneManager.LoadScene("StartScreen");
     }
 
@@ -27,4 +33,6 @@ public class PauseMenus : MonoBehaviour
     {
         pauseMenu.SetActive(false);
     }
+
+
 }
