@@ -9,7 +9,10 @@ using ExitGames.Client.Photon;
 public enum EventCodes
 {
     None = 0,
-    Order
+    Order,
+    RequestReset,
+    ConfirmReset,
+    DenyReset
 }
 
 public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
@@ -44,18 +47,19 @@ public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
         {
             robot.addNewList(orders);
         }
-        else if (PhotonNetwork.IsMasterClient)
+        /*else if (PhotonNetwork.IsMasterClient)
         {
             ownOrders = orders;
-        }
-
+        }*/
         else
         {
+            ownOrders = orders;
+
             for (int i = 0; i < orders.Count; i++)
             {
                 Vector3 contentData = new Vector3(i, (int)orders[i].type, orders[i].value);
                 object content = (object)contentData;
-                RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
+                RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.Others};
                 PhotonNetwork.RaiseEvent((byte)EventCodes.Order, content, options, SendOptions.SendReliable);
             }
         }
@@ -101,7 +105,11 @@ public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
             case EventCodes.Order:
                 Vector3 contentData = (Vector3)photonEvent.CustomData;
                 var order = new Order((Order.Type)contentData.y, contentData.z);
-                otherOrdersUnsorted.Add((int)contentData.x, order);
+
+                if(!otherOrdersUnsorted.ContainsKey((int)contentData.x))
+                {
+                    otherOrdersUnsorted.Add((int)contentData.x, order);
+                }
                 break;
         }
     }
@@ -109,5 +117,10 @@ public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         playerDisconnectedPanel.SetActive(true);
+    }
+
+    public bool IsSingleplayer()
+    {
+        return singlePlayer;
     }
 }

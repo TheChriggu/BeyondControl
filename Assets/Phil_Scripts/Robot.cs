@@ -22,7 +22,7 @@ public class Robot : MonoBehaviourPunCallbacks
     float targetVelocity;
 
     //float currentRotation = 0;
-    Rigidbody2D rigidbody;
+    Rigidbody2D body;
     Vector3 direction;
     //public GameObject debugging;
     float rotateAmount;
@@ -33,9 +33,11 @@ public class Robot : MonoBehaviourPunCallbacks
     List<Order> listOfOrders = new List<Order>();
     List<Order> listOfOrdersPast = new List<Order>();
 
+    public NetworkComponent networkComponent;
+
     private void Start()
     {
-        rigidbody = GetComponent<Rigidbody2D>();
+        body = GetComponent<Rigidbody2D>();
     }
     #region movement
     void Update()
@@ -43,11 +45,11 @@ public class Robot : MonoBehaviourPunCallbacks
         //Debugging Controlls
         #region Speed
         setSpeed();
-        rigidbody.AddForce(transform.up * currentVelocity * floorModifier);
+        body.AddForce(transform.up * currentVelocity * floorModifier);
         #endregion
 
         #region rotation
-        if (setRotation()) rigidbody.AddTorque(-rotateAmount * rotationSpeed);
+        if (setRotation()) body.AddTorque(-rotateAmount * rotationSpeed);
         if (countdownActive) Debug.Log("Coundown: " + (countdownEnd - Time.time));
         if (countdownActive && countdownEnd < Time.time) OnCountDownEnd();
         #endregion
@@ -91,8 +93,8 @@ public class Robot : MonoBehaviourPunCallbacks
 
     void getBoosted(Vector3 dir, Vector3 from, float force, bool spinning)
     {
-        if(spinning)rigidbody.AddForceAtPosition(dir * force, from, ForceMode2D.Impulse);
-        else rigidbody.AddForce(dir * force, ForceMode2D.Impulse);
+        if(spinning) body.AddForceAtPosition(dir * force, from, ForceMode2D.Impulse);
+        else body.AddForce(dir * force, ForceMode2D.Impulse);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -222,7 +224,7 @@ public class Robot : MonoBehaviourPunCallbacks
         //Removing Order from list
         listOfOrders.RemoveAt(0);
 
-        if(PhotonNetwork.IsMasterClient)
+        if(PhotonNetwork.IsMasterClient || networkComponent.IsSingleplayer())
         {
             //Executing Order only on master client
             executeOrder(nextOrder);
