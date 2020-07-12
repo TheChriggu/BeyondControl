@@ -52,11 +52,12 @@ public class UI_Button : MonoBehaviour
         //restricts possible values
         checkValues();
 
-        inputField.SetTextWithoutNotify(currentValue.ToString());
+        //inputField.SetTextWithoutNotify(currentValue.ToString());
     }
 
     void checkValues()
     {
+        //Debug.Log("Checking Values for type: " + type.ToString());
         if (type == Order.Type.Speed)
         {
             if (currentValue < -maxSpeed) currentValue = -maxSpeed;
@@ -67,6 +68,7 @@ public class UI_Button : MonoBehaviour
             if (currentValue < -179) currentValue = -179;
             if (currentValue > 179) currentValue = 179;
         }
+        inputField.SetTextWithoutNotify(currentValue.ToString());
     }
 
     public Order returnOrder()
