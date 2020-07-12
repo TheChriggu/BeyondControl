@@ -12,7 +12,8 @@ public enum EventCodes
     Order,
     RequestReset,
     ConfirmReset,
-    DenyReset
+    DenyReset,
+    LevelCompleted
 }
 
 public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
@@ -103,6 +104,7 @@ public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
 
     public void OnEvent(EventData photonEvent)
     {
+
         EventCodes code = (EventCodes)photonEvent.Code;
 
         switch (code)
@@ -116,6 +118,7 @@ public class NetworkComponent : MonoBehaviourPunCallbacks, IOnEventCallback
                     otherOrdersUnsorted.Add((int)contentData.x, order);
                 }
                 break;
+
         }
     }
 
