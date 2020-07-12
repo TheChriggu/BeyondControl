@@ -41,6 +41,8 @@ public class UI_Button : MonoBehaviour
             dropdown.GetComponent<RectTransform>().sizeDelta = new Vector2(width, 30);
             inputField.gameObject.SetActive(false);
         }
+
+        checkValues();
     }
 
     public void onInputValueChanged(string value)
@@ -48,6 +50,14 @@ public class UI_Button : MonoBehaviour
         currentValue = float.Parse(value);
 
         //restricts possible values
+        checkValues();
+
+        //inputField.SetTextWithoutNotify(currentValue.ToString());
+    }
+
+    void checkValues()
+    {
+        //Debug.Log("Checking Values for type: " + type.ToString());
         if (type == Order.Type.Speed)
         {
             if (currentValue < -maxSpeed) currentValue = -maxSpeed;
