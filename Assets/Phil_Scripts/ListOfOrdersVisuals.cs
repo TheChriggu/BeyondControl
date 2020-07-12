@@ -45,6 +45,7 @@ public class ListOfOrdersVisuals : MonoBehaviour
             textOrder.font = ArialFont;
             textOrder.material = ArialFont.material;
             textOrder.color = Color.black;
+            //textOrder.fontSize = 20;
             //Content of Text
             if (o.value != 0) textOrder.text = "Type: " + o.type.ToString() + " , " + o.value;
             else textOrder.text = "Type: " + o.type.ToString();
