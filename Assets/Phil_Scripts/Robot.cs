@@ -127,6 +127,10 @@ public class Robot : MonoBehaviourPunCallbacks
         {
             enterGrass();
         }
+        else if (collision.gameObject.tag == "DeathZone")
+        {
+            die();
+        }
         else if (collision.gameObject.tag == "ExpensiveStuff")
         {
             ExpensiveStuff stuff = collision.gameObject.GetComponent<ExpensiveStuff>();
@@ -183,6 +187,12 @@ public class Robot : MonoBehaviourPunCallbacks
         floorModifier = 1;
         if (onGrass) floorModifier += grassmodifier;
         if (onStreet) floorModifier += streetmodifier;
+    }
+
+    void die()
+    {
+        RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        PhotonNetwork.RaiseEvent((byte)EventCodes.ConfirmReset, null, options, SendOptions.SendReliable);
     }
     #endregion
 
