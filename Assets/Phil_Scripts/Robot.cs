@@ -34,6 +34,10 @@ public class Robot : MonoBehaviourPunCallbacks
 
     Animator animator;
     public GameObject robotSprite;
+    AudioSource audioSource;
+    public AudioSource deathAudioSource;
+    public AudioClip deathSound;
+    
 
     List<Order> listOfOrders = new List<Order>();
     List<Order> listOfOrdersPast = new List<Order>();
@@ -42,6 +46,7 @@ public class Robot : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         animator = GetComponent<Animator>();
         animator.SetInteger("Direction", 1);
 
@@ -53,9 +58,24 @@ public class Robot : MonoBehaviourPunCallbacks
         //Debugging Controlls
         #region Speed
         setSpeed();
-        body.AddForce(transform.up * currentVelocity * floorModifier);
 
-        animator.SetFloat("Speed", currentVelocity);
+        animator.SetFloat("Speed", Mathf.Floor(currentVelocity));
+
+        if(Mathf.Floor(currentVelocity) > 0)
+        {
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
+
+        }
+        else
+        {
+            audioSource.Stop();
+        }
+
+
+        body.AddForce(transform.up * currentVelocity * floorModifier);
         #endregion
 
         #region rotation
@@ -193,6 +213,19 @@ public class Robot : MonoBehaviourPunCallbacks
 
     void die()
     {
+        StartCoroutine(death());
+    }
+
+    IEnumerator death()
+    {
+        listOfOrders = new List<Order>();
+        targetVelocity = 0;
+        body.velocity = Vector3.zero;
+
+        deathAudioSource.Play();
+
+        yield return new WaitForSeconds(9);
+
         RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.All };
         PhotonNetwork.RaiseEvent((byte)EventCodes.ConfirmReset, null, options, SendOptions.SendReliable);
     }

@@ -60,7 +60,9 @@ public class LevelGoal : MonoBehaviourPunCallbacks, IOnEventCallback
         transform.GetChild(0).gameObject.SetActive(false);
         transform.GetChild(1).gameObject.SetActive(true);
 
-        yield return new WaitForSeconds(5);
+        GetComponent<AudioSource>().Play();
+
+        yield return new WaitForSeconds(7);
 
         SceneManager.LoadScene(nextSceneName, LoadSceneMode.Single);
 
