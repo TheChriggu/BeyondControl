@@ -5470,7 +5470,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   robot: {fileID: 161110774}
   playerDisconnectedPanel: {fileID: 650974582}
-  singlePlayer: 0
+  singlePlayer: 1
 --- !u!4 &1584490040
 Transform:
   m_ObjectHideFlags: 0
