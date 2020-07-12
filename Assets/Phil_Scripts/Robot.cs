@@ -48,6 +48,7 @@ public class Robot : MonoBehaviourPunCallbacks
 
         #region rotation
         if (setRotation()) rigidbody.AddTorque(-rotateAmount * rotationSpeed);
+        if (countdownActive) Debug.Log("Coundown: " + (countdownEnd - Time.time));
         if (countdownActive && countdownEnd < Time.time) OnCountDownEnd();
         #endregion
     }
@@ -74,6 +75,19 @@ public class Robot : MonoBehaviourPunCallbacks
 
         return false;
     }
+    void startCountdown(float t)
+    {
+        if (countdownActive) return;
+        countdownActive = true;
+        countdownEnd = Time.time + t;
+    }
+
+    void OnCountDownEnd()
+    {
+        countdownActive = false;
+        lockRotation = true;
+    }
+
 
     void getBoosted(Vector3 dir, Vector3 from, float force, bool spinning)
     {
@@ -158,19 +172,6 @@ public class Robot : MonoBehaviourPunCallbacks
     #endregion
 
     #region Ticks
-    void startCountdown(float t)
-    {
-        //if (countdownEnd > Time.time) return;
-        countdownActive = true;
-        countdownEnd = Time.time + t;
-    }
-
-    void OnCountDownEnd()
-    {
-        countdownActive = false;
-        lockRotation = true;
-    }
-
     void onTick()
     {
         Debug.Log("TICK!");
