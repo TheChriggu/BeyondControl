@@ -9,11 +9,27 @@ using System;
 
 public class Login : MonoBehaviourPunCallbacks
 {
+    public Button startButton;
+    
     string gameVersion = "1";
     public Text userName;
     void Awake()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
+    }
+
+    private void Update()
+    {
+        string name = userName.text;
+        
+        if (name != "")
+        {
+            startButton.interactable = true;
+        }
+        else
+        {
+            startButton.interactable = false;
+        }
     }
 
     public void OnLogin()
