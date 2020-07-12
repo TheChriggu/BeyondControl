@@ -66,4 +66,12 @@ public class UI_Button : MonoBehaviour
         Order order = new Order(type, currentValue);
         return order;
     }
+
+    public void increaseValue(int i)
+    {
+        //Debug.Log("increasing Value");
+        if ((int)type > 1) return;
+        currentValue += i;
+        inputField.SetTextWithoutNotify(currentValue.ToString());
+    }
 }
