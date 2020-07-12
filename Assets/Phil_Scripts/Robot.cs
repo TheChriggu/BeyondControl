@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using ExitGames.Client.Photon;
+using Photon.Realtime;
 
 public class Robot : MonoBehaviourPunCallbacks
 {
